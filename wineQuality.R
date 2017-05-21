@@ -34,4 +34,5 @@ table(pred,test$taste)
 modelAccuracy<-(370+193+515)/nrow(test)
 modelAccuracy
 
+#Error vs the number of trees generated in the forest
 plot(model)
