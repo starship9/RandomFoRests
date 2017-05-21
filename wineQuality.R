@@ -42,3 +42,13 @@ table(predict(model))
 
 #bargraph of the above values
 barplot(table(predict(model)))
+
+library(ggplot2)
+
+#old visualisation
+ggplot(winequality_white,mapping = aes(x = taste,fill = taste)) + geom_bar()
+library(dplyr)
+
+#new visualisation
+newDF<-tbl_df(table(predict(model)))
+ggplot(newDF,mapping = aes(x = Var1, y = n,fill = Var1)) + geom_col()
