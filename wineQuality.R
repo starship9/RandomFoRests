@@ -36,3 +36,9 @@ modelAccuracy
 
 #Error vs the number of trees generated in the forest
 plot(model)
+
+#test values based off the model
+table(predict(model))
+
+#bargraph of the above values
+barplot(table(predict(model)))
