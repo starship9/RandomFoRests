@@ -52,3 +52,7 @@ library(dplyr)
 #new visualisation
 newDF<-tbl_df(table(predict(model)))
 ggplot(newDF,mapping = aes(x = Var1, y = n,fill = Var1)) + geom_col()
+
+# Plotting predicted vs actual values
+ggplot(tbl_df(table(pred,test$taste)),mapping = aes(x = pred, y = n, fill = pred)) + geom_col() + facet_wrap(~Var2)
+
