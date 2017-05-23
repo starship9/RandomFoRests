@@ -31,7 +31,7 @@ model
 pred<-predict(model,newdata = test)
 table(pred,test$taste)
 
-modelAccuracy<-(370+193+515)/nrow(test)
+modelAccuracy<-(table(pred,test$taste)[1]+table(pred,test$taste)[5]+table(pred,test$taste)[9])/nrow(test)
 modelAccuracy
 
 #Error vs the number of trees generated in the forest
