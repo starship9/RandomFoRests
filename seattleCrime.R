@@ -115,4 +115,8 @@ groupDF<-select(Seattle_Police_Department_911_Incident_Response,`Event Clearance
 names(groupDF)
 table(groupDF$`District/Sector`)
 ggplot(groupDF,mapping = aes(x = `Event Clearance Group`)) + geom_bar()
+
 ggplot(groupDF,mapping = aes(x = `Event Clearance Group`)) + geom_bar() + facet_wrap(~`District/Sector`)
+
+barplot(table(Seattle_Police_Department_911_Incident_Response$`District/Sector`))
+
