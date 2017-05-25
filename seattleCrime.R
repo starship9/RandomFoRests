@@ -1,4 +1,5 @@
 library(readr)
+library(tidyverse)
 Seattle_Police_Department_911_Incident_Response <-
   read_csv(
     "C:/Users/Nishank/Desktop/SNU/RStuff/Seattle_Police_Department_911_Incident_Response.csv"
@@ -110,3 +111,8 @@ crimeModel <-
 crimeModel <-
   randomForest(`Event Clearance Group` ~ . - `Event Clearance Code`, data = trainCrimeSet)
 
+groupDF<-select(Seattle_Police_Department_911_Incident_Response,`Event Clearance Group`,`District/Sector`) %>% filter(!is.na(`Event Clearance Group`))
+names(groupDF)
+table(groupDF$`District/Sector`)
+ggplot(groupDF,mapping = aes(x = `Event Clearance Group`)) + geom_bar()
+ggplot(groupDF,mapping = aes(x = `Event Clearance Group`)) + geom_bar() + facet_wrap(~`District/Sector`)
