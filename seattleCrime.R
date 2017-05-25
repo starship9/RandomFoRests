@@ -100,23 +100,42 @@ sampleCrimeSet <-
     nrow(Seattle_Police_Department_911_Incident_Response) * 0.7
   )
 trainCrimeSet <-
-  Seattle_Police_Department_911_Incident_Response[sampleCrimeSet, ]
+  Seattle_Police_Department_911_Incident_Response[sampleCrimeSet,]
 testCrimeSet <-
-  Seattle_Police_Department_911_Incident_Response[-sampleCrimeSet, ]
+  Seattle_Police_Department_911_Incident_Response[-sampleCrimeSet,]
 library(randomForest)
 crimeModel <-
-  randomForest( ~ `Event Clearance Group`, data = trainCrimeSet)
+  randomForest(~ `Event Clearance Group`, data = trainCrimeSet)
 crimeModel <-
   randomForest(`Event Clearance Group` ~ ., data = trainCrimeSet)
 crimeModel <-
   randomForest(`Event Clearance Group` ~ . - `Event Clearance Code`, data = trainCrimeSet)
 
-groupDF<-select(Seattle_Police_Department_911_Incident_Response,`Event Clearance Group`,`District/Sector`) %>% filter(!is.na(`Event Clearance Group`))
+groupDF <-
+  select(
+    Seattle_Police_Department_911_Incident_Response,
+    `Event Clearance Group`,
+    `District/Sector`
+  ) %>% filter(!is.na(`Event Clearance Group`))
 names(groupDF)
 table(groupDF$`District/Sector`)
-ggplot(groupDF,mapping = aes(x = `Event Clearance Group`)) + geom_bar()
+ggplot(groupDF, mapping = aes(x = `Event Clearance Group`)) + geom_bar()
 
-ggplot(groupDF,mapping = aes(x = `Event Clearance Group`)) + geom_bar() + facet_wrap(~`District/Sector`)
+ggplot(groupDF, mapping = aes(x = `Event Clearance Group`)) + geom_bar() + facet_wrap( ~
+                                                                                         `District/Sector`)
 
-barplot(table(Seattle_Police_Department_911_Incident_Response$`District/Sector`))
+barplot(table(
+  Seattle_Police_Department_911_Incident_Response$`District/Sector`
+))
 
+trainingSet <- na.omit(knnDF[1:967207, 1:3])
+testSet <- na.omit(knnDF[967208:1381725, 1:3])
+trainingOutcomes <- na.omit(knnDF[1:967207, 4])
+testOutcomes <- na.omit(knnDF[967208:1881725, 4])
+predictions <-
+  knn(
+    train = trainingSet,
+    cl = trainingOutcomes,
+    k = 1175,
+    test = testSet
+  )
