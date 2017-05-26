@@ -129,10 +129,10 @@ barplot(table(
 ))
 
 library(class)
-trainingSet <- na.omit(knnDF[1:967207, 1:3])
-trainingSet<-trainingSet[1:966947,]
-testSet <- na.omit(knnDF[967208:1381725, 1:3])
-trainingOutcomes <- na.omit(knnDF[1:967207, 4])
+trainingSet <- na.omit(knnDF[1:967207, 1:3, drop = FALSE])
+trainingSet<-trainingSet[1:966947, ,drop=FALSE]
+testSet <- na.omit(knnDF[967208:1381725, 1:3, drop = FALSE])
+trainingOutcomes <- na.omit(knnDF[1:967207, 4, drop = FALSE])
 trainingOutcomes$`District/Sector`<-as.factor(trainingOutcomes$`District/Sector`)
 testOutcomes <- na.omit(knnDF[967208:1881725, 4])
 predictions <-
