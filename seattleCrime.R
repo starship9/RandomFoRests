@@ -7,7 +7,7 @@ Seattle_Police_Department_911_Incident_Response <-
 View(Seattle_Police_Department_911_Incident_Response)
 str(Seattle_Police_Department_911_Incident_Response)
 View(head(Seattle_Police_Department_911_Incident_Response))
-barplot(Seattle_Police_Department_911_Incident_Response$`District/Sector`)
+#barplot(Seattle_Police_Department_911_Incident_Response$`District/Sector`)
 table(Seattle_Police_Department_911_Incident_Response$`District/Sector`)
 barplot(table(
   Seattle_Police_Department_911_Incident_Response$`District/Sector`
@@ -28,8 +28,8 @@ barplot(
   )
 )
 class(Seattle_Police_Department_911_Incident_Response$`Event Clearance Date`)
-Seattle_Police_Department_911_Incident_Response$`Event Clearance Date` <-
-  as.Date(Seattle_Police_Department_911_Incident_Response$`Event Clearance Date`)
+#Seattle_Police_Department_911_Incident_Response$`Event Clearance Date` <-
+#  as.Date(Seattle_Police_Department_911_Incident_Response$`Event Clearance Date`)
 barplot(table(
   Seattle_Police_Department_911_Incident_Response$`Event Clearance Group`
 ))
@@ -52,7 +52,7 @@ kmeans(Seattle_Police_Department_911_Incident_Response$`District/Sector`,
        3,
        nstart = 20)
 table(Seattle_Police_Department_911_Incident_Response$`Event Clearance Group`)
-table(Seattle_Police_Department_911_Incident_Response$`Event Clearance Group`)
+#table(Seattle_Police_Department_911_Incident_Response$`Event Clearance Group`)
 groupDF <-
   tbl_df(table(
     Seattle_Police_Department_911_Incident_Response$`Event Clearance Group`
@@ -100,12 +100,12 @@ sampleCrimeSet <-
     nrow(Seattle_Police_Department_911_Incident_Response) * 0.7
   )
 trainCrimeSet <-
-  Seattle_Police_Department_911_Incident_Response[sampleCrimeSet,]
+  Seattle_Police_Department_911_Incident_Response[sampleCrimeSet, ]
 testCrimeSet <-
-  Seattle_Police_Department_911_Incident_Response[-sampleCrimeSet,]
+  Seattle_Police_Department_911_Incident_Response[-sampleCrimeSet, ]
 library(randomForest)
 crimeModel <-
-  randomForest(~ `Event Clearance Group`, data = trainCrimeSet)
+  randomForest( ~ `Event Clearance Group`, data = trainCrimeSet)
 crimeModel <-
   randomForest(`Event Clearance Group` ~ ., data = trainCrimeSet)
 crimeModel <-
@@ -116,21 +116,24 @@ groupDF <-
     Seattle_Police_Department_911_Incident_Response,
     `Event Clearance Group`,
     `District/Sector`
-  ) %>% filter(!is.na(`Event Clearance Group`))
+  ) %>% filter(!is.na(`Event Clearance Group`),`District/Sector`!='NULL')
 names(groupDF)
 table(groupDF$`District/Sector`)
 ggplot(groupDF, mapping = aes(x = `Event Clearance Group`)) + geom_bar()
 
-ggplot(groupDF, mapping = aes(x = `Event Clearance Group`)) + geom_bar() + facet_wrap( ~
-                                                                                         `District/Sector`)
+ggplot(groupDF, mapping = aes(x = `Event Clearance Group`)) + geom_bar() + facet_wrap(~
+                                                                                        `District/Sector`)
 
 barplot(table(
   Seattle_Police_Department_911_Incident_Response$`District/Sector`
 ))
 
+library(class)
 trainingSet <- na.omit(knnDF[1:967207, 1:3])
+trainingSet<-trainingSet[1:966947,]
 testSet <- na.omit(knnDF[967208:1381725, 1:3])
 trainingOutcomes <- na.omit(knnDF[1:967207, 4])
+trainingOutcomes$`District/Sector`<-as.factor(trainingOutcomes$`District/Sector`)
 testOutcomes <- na.omit(knnDF[967208:1881725, 4])
 predictions <-
   knn(
@@ -139,3 +142,7 @@ predictions <-
     k = 1175,
     test = testSet
   )
+
+names(trainingOutcomes)
+str(trainingOutcomes)
+class(trainingOutcomes$`District/Sector`)
