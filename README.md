@@ -1,2 +1,2 @@
-# RandomFoRests
-Practicing random forests in R, will update with more examples soon.
+# pRactice
+Practicing various analytics algorithms in R, will update with more examples soon.
