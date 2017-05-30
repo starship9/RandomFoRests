@@ -1,3 +1,7 @@
 library(readr)
 Theft_Data <- read_csv("C:/Users/Nishank/Desktop/SNU/RStuff/Theft Data.csv")
 View(Theft_Data)
+names(Theft_Data)
+library(tidyverse)
+Theft_Data<-select(Theft_Data,(1:6))
+names(Theft_Data)
