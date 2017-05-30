@@ -7,8 +7,8 @@ library(tidyverse)
 Theft_Data <- select(Theft_Data, (1:6))
 names(Theft_Data)
 table(Theft_Data$Name)
-ggplot(Theft_Data, mapping = aes(x = Name, y = Total)) + geom_col() + facet_wrap( ~
-                                                                                    Year)
+ggplot(Theft_Data, mapping = aes(x = Name, y = Total)) + geom_col() + facet_wrap(~
+                                                                                   Year)
 
 theftModel <- lm(Total ~ Year + Name, data = Theft_Data)
 summary(theftModel)
