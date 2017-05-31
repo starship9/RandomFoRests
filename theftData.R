@@ -36,3 +36,7 @@ plot(theftForest)
 summary(theftForest)
 table(predict(theftForest))
 barplot(table(predict(theftForest)))
+
+forestDF<-tbl_df(table(predict(theftForest)))
+names(forestDF)
+plotly::ggplotly(ggplot(forestDF, mapping = aes(x = Var1, y = n)) + geom_col())
