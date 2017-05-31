@@ -13,12 +13,14 @@ table(Theft_Data$Name)
 ggplot(Theft_Data, mapping = aes(x = Name, y = Total)) + geom_col() + facet_wrap(~
                                                                                    Year)
 
-theftModel <- lm(total ~ year + name, data = Theft_Data)
+theftModel <- lm(total ~ year + name + theft + luggage + pickpocketing, data = Theft_Data)
 summary(theftModel)
 plot(theftModel$residuals)
 qqnorm(theftModel$residuals)
 qqline(theftModel$residuals)
 hist(theftModel$residuals)
+predict(theftModel)
+plot(predict(theftModel))
 
 library(randomForest)
 theftForest <-
