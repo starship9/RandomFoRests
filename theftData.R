@@ -10,7 +10,7 @@ names(Theft_Data) <-
   c("name", "theft", "luggage", "pickpocketing", "total", "year")
 
 table(Theft_Data$name)
-g<-ggplot(Theft_Data, mapping = aes(x = name, y = total)) + geom_col() + facet_wrap(~year)
+g<-ggplot(Theft_Data, mapping = aes(x = name, y = total, fill = name)) + geom_col() + facet_wrap(~year)
 
 #Added this since the basic ggplot graph is a bit too congested to make stuff out
 plotly::ggplotly(g)
