@@ -10,12 +10,15 @@ names(Theft_Data) <-
   c("name", "theft", "luggage", "pickpocketing", "total", "year")
 
 table(Theft_Data$name)
-g<-ggplot(Theft_Data, mapping = aes(x = name, y = total, fill = name)) + geom_col() + facet_wrap(~year)
+g <-
+  ggplot(Theft_Data, mapping = aes(x = name, y = total, fill = name)) + geom_col() + facet_wrap( ~
+                                                                                                   year)
 
 #Added this since the basic ggplot graph is a bit too congested to make stuff out
 plotly::ggplotly(g)
 
-theftModel <- lm(total ~ year + name + theft + luggage + pickpocketing, data = Theft_Data)
+theftModel <-
+  lm(total ~ year + name + theft + luggage + pickpocketing, data = Theft_Data)
 summary(theftModel)
 plot(theftModel$residuals)
 qqnorm(theftModel$residuals)
@@ -26,7 +29,8 @@ plot(predict(theftModel))
 
 library(randomForest)
 theftForest <-
-  randomForest(as.factor(name) ~ theft + year + total + luggage + pickpocketing, data = Theft_Data)
+  randomForest(as.factor(name) ~ theft + year + total + luggage + pickpocketing,
+               data = Theft_Data)
 class(Theft_Data$name)
 plot(theftForest)
 summary(theftForest)
