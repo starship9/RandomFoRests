@@ -30,7 +30,7 @@ plot(predict(theftModel))
 library(randomForest)
 theftForest <-
   randomForest(as.factor(name) ~ theft + year + total + luggage + pickpocketing,
-               data = Theft_Data)
+               data = theftTrain)
 class(Theft_Data$name)
 plot(theftForest)
 summary(theftForest)
@@ -40,3 +40,13 @@ barplot(table(predict(theftForest)))
 forestDF<-tbl_df(table(predict(theftForest)))
 names(forestDF)
 plotly::ggplotly(ggplot(forestDF, mapping = aes(x = Var1, y = n)) + geom_col())
+
+Theft_Data<-Theft_Data[complete.cases(Theft_Data),]
+Theft_Data$name<-as.factor(Theft_Data$name)
+theftTrain <- Theft_Data[1:499,]
+theftTest <- Theft_Data[500:712,]
+theftTrainNames <- Theft_Data[1:499,1]
+theftTestNames <- Theft_Data[500:712,1]
+
+library(class)
+knnPredictions<-knn(train = theftTrain, cl = theftTrainNames, k = 27,test = theftTest)
