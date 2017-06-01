@@ -9,6 +9,8 @@ names(Theft_Data)
 names(Theft_Data) <-
   c("name", "theft", "luggage", "pickpocketing", "total", "year")
 
+#For reproducibility
+set.seed(123)
 table(Theft_Data$name)
 g <-
   ggplot(Theft_Data, mapping = aes(x = name, y = total, fill = name)) + geom_col() + facet_wrap(~
