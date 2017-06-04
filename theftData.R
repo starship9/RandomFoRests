@@ -20,7 +20,7 @@ g <-
 plotly::ggplotly(g)
 
 theftModel <-
-  lm(total ~ year + name + theft + luggage + pickpocketing, data = theftTrain)
+  lm(total ~ ., data = theftTrain)
 summary(theftModel)
 plot(theftModel$residuals)
 qqnorm(theftModel$residuals)
@@ -33,7 +33,7 @@ table(lmPred, theftTest$total)
 
 library(randomForest)
 theftForest <-
-  randomForest(as.factor(name) ~ theft + year + total + luggage + pickpocketing,
+  randomForest(as.factor(name) ~ .,
                data = theftTrain)
 class(Theft_Data$name)
 theftForest
