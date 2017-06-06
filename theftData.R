@@ -5,6 +5,14 @@ View(Theft_Data)
 names(Theft_Data)
 library(tidyverse)
 Theft_Data <- select(Theft_Data, (1:6))
+Theft_Data <- Theft_Data[complete.cases(Theft_Data),]
+Theft_Data$name <- as.factor(Theft_Data$name)
+theftTrain <- Theft_Data[1:499, -1]
+theftTest <- Theft_Data[500:712,-1]
+theftTrainNames <- Theft_Data[1:499, 1]
+theftTestNames <- Theft_Data[500:712, 1]
+
+
 names(Theft_Data)
 names(Theft_Data) <-
   c("name", "theft", "luggage", "pickpocketing", "total", "year")
@@ -51,13 +59,6 @@ forestDF <- tbl_df(table(predict(theftForest)))
 names(forestDF)
 #Random forest plot
 plotly::ggplotly(ggplot(forestDF, mapping = aes(x = Var1, y = n)) + geom_col())
-
-Theft_Data <- Theft_Data[complete.cases(Theft_Data),]
-Theft_Data$name <- as.factor(Theft_Data$name)
-theftTrain <- Theft_Data[1:499, -1]
-theftTest <- Theft_Data[500:712,-1]
-theftTrainNames <- Theft_Data[1:499, 1]
-theftTestNames <- Theft_Data[500:712, 1]
 
 library(class)
 knnPredictions <-
