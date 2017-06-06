@@ -28,13 +28,13 @@ plotly::ggplotly(g)
 
 #trying out linear regression
 theftModel <-
-  lm(total ~ ., data = theftTrain)
+  lm(total ~ ., data = training)
 summary(theftModel)
 plot(theftModel$residuals)
 qqnorm(theftModel$residuals)
 qqline(theftModel$residuals)
 hist(theftModel$residuals)
-lmPred <- predict(theftModel, newdata = theftTest)
+lmPred <- predict(theftModel, newdata = testing)
 #Linear regression plot
 plot(predict(theftModel))
 
@@ -43,7 +43,7 @@ table(lmPred, theftTest$total)
 library(randomForest)
 theftForest <-
   randomForest(as.factor(name) ~ .,
-               data = theftTrain)
+               data = training)
 class(Theft_Data$name)
 theftForest
 plot(theftForest)
@@ -51,7 +51,7 @@ summary(theftForest)
 table(predict(theftForest))
 barplot(table(predict(theftForest)))
 
-newPred <- predict(theftForest, newdata = theftTest)
+newPred <- predict(theftForest, newdata = testing)
 table(newPred, theftTest$name)
 
 
