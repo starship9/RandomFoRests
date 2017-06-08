@@ -135,7 +135,7 @@ theft2017 <-
            stringsAsFactors = FALSE)
 head(theft2017)
 theft2017$name <- as.factor(theft2017$name)
-testing$year[testing$year == '2016'] <- '2017'
+testing$year <- '2017'
 testing$year <- as.numeric(testing$year)
 testLMPred <- predict(testLMModel, newdata = testing)
 theft2017$predictedTotal <- testLMPred
