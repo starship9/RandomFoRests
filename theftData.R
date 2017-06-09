@@ -40,9 +40,6 @@ plot(predict(theftModel))
 
 table(lmPred, theftTest$total)
 
-theft2017$lmPred <- lmPred
-plot2017LM <- ggplot(theft2017,mapping = aes(x = name, y = lmPred)) + geom_col()
-plotly::ggplotly(plot2017LM)
 
 
 library(randomForest)
@@ -150,3 +147,7 @@ plot(theft2017$name, theft2017$predictedTotal)
 plot2017 <-
   ggplot(theft2017, mapping = aes(x = name, y = predictedTotal)) + geom_col()
 plotly::ggplotly(plot2017)
+
+theft2017$lmPred <- lmPred
+plot2017LM <- ggplot(theft2017,mapping = aes(x = name, y = lmPred)) + geom_col()
+plotly::ggplotly(plot2017LM)
