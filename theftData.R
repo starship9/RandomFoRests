@@ -40,6 +40,11 @@ plot(predict(theftModel))
 
 table(lmPred, theftTest$total)
 
+theft2017$lmPred <- lmPred
+plot2017LM <- ggplot(theft2017,mapping = aes(x = name, y = lmPred)) + geom_col()
+plotly::ggplotly(plot2017LM)
+
+
 library(randomForest)
 theftForest <-
   randomForest(as.factor(name) ~ .,
@@ -52,7 +57,7 @@ table(predict(theftForest))
 barplot(table(predict(theftForest)))
 
 newPred <- predict(theftForest, newdata = testing)
-table(newPred, theftTest$name)
+table(newPred, testing$name)
 
 
 forestDF <- tbl_df(table(predict(theftForest)))
