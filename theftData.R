@@ -12,7 +12,7 @@ theftTest <- Theft_Data[500:712,-1]
 theftTrainNames <- Theft_Data[1:499, 1]
 theftTestNames <- Theft_Data[500:712, 1]
 
-
+Theft_Data$year <- as.factor(Theft_Data$year)
 names(Theft_Data)
 names(Theft_Data) <-
   c("name", "theft", "luggage", "pickpocketing", "total", "year")
@@ -118,7 +118,7 @@ hist(theftTest$diff)
 plot(theftTest$total, lmPred)
 
 #Adding a test linear model, ony using the name of the region and the year as predictors
-testLMModel <- lm(total ~ name + year, data = training)
+testLMModel <- lm(total ~ name + as.factor(year), data = training)
 summary(testLMModel)
 plot(testLMModel$residuals)
 qqnorm(testLMModel$residuals)
@@ -148,6 +148,14 @@ plot2017 <-
   ggplot(theft2017, mapping = aes(x = name, y = predictedTotal)) + geom_col()
 plotly::ggplotly(plot2017)
 
+#Original lm
 theft2017$lmPred <- lmPred
 plot2017LM <- ggplot(theft2017,mapping = aes(x = name, y = lmPred)) + geom_col()
 plotly::ggplotly(plot2017LM)
+
+stepTheft <- step(theftModel)
+summary(stepTheft)
+stepPred <- predict(stepTheft, newdata = testing)
+head(stepPred)
+head(testing$total)
+
