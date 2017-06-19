@@ -76,6 +76,8 @@ intrain <-
   createDataPartition(y = Theft_Data$name, p = 0.7, list = FALSE)
 training <- Theft_Data[intrain,]
 testing <- Theft_Data[-intrain,]
+training$year <- as.factor(training$year)
+testing$year <- as.factor(testing$year)
 dim(training)
 dim(testing)
 anyNA(Theft_Data)
@@ -116,9 +118,9 @@ theftTest$diff <-  abs(theftTest$total - lmPred)
 plot(theftTest$diff)
 hist(theftTest$diff)
 plot(theftTest$total, lmPred)
-
+class(training$year)
 #Adding a test linear model, ony using the name of the region and the year as predictors
-testLMModel <- lm(total ~ name + as.factor(year), data = training)
+testLMModel <- lm(total ~ name + as.numeric(year), data = training)
 summary(testLMModel)
 plot(testLMModel$residuals)
 qqnorm(testLMModel$residuals)
@@ -138,7 +140,7 @@ theft2017 <-
 head(theft2017)
 theft2017$name <- as.factor(theft2017$name)
 testing$year <- '2017'
-testing$year <- as.numeric(testing$year)
+testing$year <- as.factor(testing$year)
 testLMPred <- predict(testLMModel, newdata = testing)
 theft2017$predictedTotal <- testLMPred
 head(theft2017)
