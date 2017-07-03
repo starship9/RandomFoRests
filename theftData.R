@@ -17,14 +17,14 @@ library(tidyverse)
 Theft_Data <- select(Theft_Data, (1:6))
 
 #selecting only complete rows
-Theft_Data <- Theft_Data[complete.cases(Theft_Data),]
+Theft_Data <- Theft_Data[complete.cases(Theft_Data), ]
 
 #converting the names into factor variables
 Theft_Data$name <- as.factor(Theft_Data$name)
 
 #dividing data into training/testing sets
-theftTrain <- Theft_Data[1:499, -1]
-theftTest <- Theft_Data[500:712,-1]
+theftTrain <- Theft_Data[1:499,-1]
+theftTest <- Theft_Data[500:712, -1]
 theftTrainNames <- Theft_Data[1:499, 1]
 theftTestNames <- Theft_Data[500:712, 1]
 
@@ -39,8 +39,8 @@ table(Theft_Data$name)
 
 #basic plot for number of crime instances per district across the years
 g <-
-  ggplot(Theft_Data, mapping = aes(x = name, y = total)) + geom_col() + facet_wrap(~
-                                                                                     year)
+  ggplot(Theft_Data, mapping = aes(x = name, y = total)) + geom_col() + facet_wrap( ~
+                                                                                    year)
 #Added this since the basic ggplot graph is a bit too congested to make stuff out
 plotly::ggplotly(g)
 
@@ -66,7 +66,7 @@ plot(predict(theftModel))
 #library for using functions pertaining to random forests
 library(randomForest)
 
-#using a random forest to predict crime 
+#using a random forest to predict crime
 theftForest <-
   randomForest(as.factor(name) ~ .,
                data = training)
@@ -88,7 +88,7 @@ newPred <- predict(theftForest, newdata = testing)
 #table(newPred, testing$name)
 
 #saving the results in a data frame
-forestDF <- tbl_df(table(predict(theftForest)))
+forestDF <- tbl_df(table(predict(theftForest, newdata = testing)))
 names(forestDF)
 #Random forest plot
 plotly::ggplotly(ggplot(forestDF, mapping = aes(x = Var1, y = n)) + geom_col())
@@ -108,8 +108,8 @@ library(caret)
 #partitioning the data into training/testing sets with a 70/30 split
 intrain <-
   createDataPartition(y = Theft_Data$name, p = 0.7, list = FALSE)
-training <- Theft_Data[intrain,]
-testing <- Theft_Data[-intrain,]
+training <- Theft_Data[intrain, ]
+testing <- Theft_Data[-intrain, ]
 # training$year <- as.factor(training$year)
 # testing$year <- as.factor(testing$year)
 # dim(training)
@@ -201,6 +201,7 @@ theft2017$name <- as.factor(theft2017$name)
 
 #using the year 2017
 testing$year <- '2017'
+testing$year <- as.numeric(testing$year)
 #testing$year <- as.factor(testing$year)
 
 #predicting using the new regression model
@@ -236,7 +237,7 @@ plotly::ggplotly(plot2017LM)
 #storing the results of the random forest predictions into the data frame
 theft2017$forestPred <- newPred
 
-#creating a separate data frame, needed for power BI
+#creating a separate data frame, used in the powerBI report
 theft2017RF <- tbl_df(table(theft2017$forestPred))
 #head(theft2017RF)
 #tail(theft2017RF)
@@ -245,3 +246,44 @@ theft2017RF <- tbl_df(table(theft2017$forestPred))
 #   randomForest(total ~ as.factor(name) + year, data = training)
 # names(training)
 # class(training$name)
+
+library(rpart)
+library(rpart.plot)
+library(caret)
+library(e1071)
+
+cartModel <- rpart(total~as.factor(name) + year, data = training)
+prp(cartModel)
+
+cartModelPred <- predict(cartModel, newdata = testing)
+cartModelPred
+
+plot(testing$name, cartModelPred)
+str(theft2017)
+
+theft2017$cartPred <- cartModelPred
+
+cartModelPredSSE <- sum((testing$total - cartModelPred)^2)
+# cartModelPredSSE
+# sqrt(cartModelPredSSE/nrow(testing))
+
+set.seed(100)
+tr.control <- trainControl(method = "cv", number = 10)
+cartGrid <-  expand.grid( .cp = seq(0.01,0.50,0.01))
+
+tr <- train(total~as.factor(name) + year, data = training,method = "rpart", trControl = tr.control, tuneGrid = cartGrid)
+tr
+
+cartModel2 <- rpart(total~as.factor(name) + year, data = training, cp = 0.32)
+cartModel2Pred <- predict(cartModel2, newdata = testing)
+cartModel2PredSSE <- sum((testing$total - cartModel2Pred)^2)
+cartModel2PredSSE
+sqrt(cartModel2PredSSE/nrow(testing))
+prp(cartModel2)
+
+theft2017$cartPred2 <- cartModel2Pred
+
+cartPlot <- ggplot(data = theft2017, mapping = aes(x = name, y = cartPred)) + geom_col()
+cartPlot2 <- ggplot(data = theft2017, mapping = aes(x = name, y = cartPred2)) + geom_col()
+plotly::ggplotly(cartPlot)
+plotly::ggplotly(cartPlot2)
